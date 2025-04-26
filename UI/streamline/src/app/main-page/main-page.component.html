@@ -1,7 +1,7 @@
 <div class="main-container">
   <div cass="video-container" fxLayout="row" fxLayoutAlign="center center">
-    <video #videoPlayer controls autoplay muted loop class="responsive-video">
-      <source src="video-assets/{{asset}}" type="video/mp4" />
+    <video #videoPlayer controls autoplay muted loop class="responsive-video" [src]="asset">
+      <!-- <source [src]="asset" type="video/mp4" /> -->
       Does not support
     </video>
     <div
@@ -34,6 +34,18 @@
           <mat-icon class="transparent icon">search</mat-icon>
         </a>
       </div>
+    </div>
+  </div>
+  <div class="overlay-container" fxLayout="row" fxLayoutAlign="space-between center">
+    <div class="icon-wrapper">
+      <button mat-icon-button (click)="changeVideo(false)">
+        <mat-icon class="transparent icon">chevron_left</mat-icon>
+      </button>
+    </div>
+    <div class="icon-wrapper" (click)="changeVideo(true)">
+      <button mat-icon-button>
+        <mat-icon class="transparent icon">chevron_right</mat-icon>
+      </button>
     </div>
   </div>
 </div>

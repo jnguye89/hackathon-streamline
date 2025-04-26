@@ -23,13 +23,14 @@ import { HttpClientModule } from '@angular/common/http';
   styleUrl: './main-page.component.scss',
 })
 export class MainPageComponent {
+  videos: any[] = [];
   asset: string = "";
   constructor(private videoService: VideoService) {}
 
   ngOnInit() {
     this.videoService.getVideos().subscribe((videos) => {
-      this.asset = this.pickRandom(videos).filename;
-      console.log(this.asset);
+      this.videos = videos;
+      this.asset = `video-assets/${this.pickRandom(videos).filename}`;
     });
   }
 
@@ -37,5 +38,24 @@ export class MainPageComponent {
     if (!array.length) return null; // Safety check for empty arrays
     const randomIndex = Math.floor(Math.random() * array.length);
     return array[randomIndex];
+  }
+
+  changeVideo(isNext: Boolean) {
+    var currentIndex = this.videos.findIndex(video => this.asset.includes(video.filename));
+    if (isNext) {
+      if (currentIndex === this.videos.length - 1) {
+        this.asset = `video-assets/${this.videos[0].filename}`;
+      } else {
+        this.asset = `video-assets/${this.videos[(currentIndex + 1)].filename}`;
+      }
+    }
+    else {
+      if (currentIndex === 0) {
+        this.asset = `video-assets/${this.videos[this.videos.length - 1].filename}`;
+      }
+      else {
+        this.asset = `video-assets/${this.videos[(currentIndex - 1)].filename}`;
+      }
+    }
   }
 }
