@@ -27,7 +27,12 @@
             "inlineStyleLanguage": "scss",
             "assets": [
               "src/favicon.ico",
-              "src/assets"
+              "src/assets", 
+              {
+                "glob": "**/*",
+                "input": "/Users/jnguye89/Documents/Development/Hackathon/streamline/hackathon-streamline/video-player-backend/uploads/",
+                "output": "video-assets"
+              }
             ],
             "styles": [
               "@angular/material/prebuilt-themes/purple-green.css",

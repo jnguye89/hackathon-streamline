@@ -16,18 +16,26 @@ import { HttpClientModule } from '@angular/common/http';
     MatDividerModule,
     FlexLayoutModule,
     MatChipsModule,
-    HttpClientModule
+    HttpClientModule,
   ],
   providers: [VideoService],
   templateUrl: './main-page.component.html',
-  styleUrl: './main-page.component.scss'
+  styleUrl: './main-page.component.scss',
 })
 export class MainPageComponent {
+  asset: string = "";
   constructor(private videoService: VideoService) {}
 
   ngOnInit() {
     this.videoService.getVideos().subscribe((videos) => {
-      console.log(videos);
+      this.asset = this.pickRandom(videos).filename;
+      console.log(this.asset);
     });
+  }
+
+  private pickRandom(array: any[]) {
+    if (!array.length) return null; // Safety check for empty arrays
+    const randomIndex = Math.floor(Math.random() * array.length);
+    return array[randomIndex];
   }
 }
