@@ -23,13 +23,19 @@ import { HttpClientModule } from '@angular/common/http';
   styleUrl: './main-page.component.scss',
 })
 export class MainPageComponent {
-  videos = ['/assets/IMG_9338.MOV', '/assets/IMG_9701.MOV'];
-  asset = this.videos[0];
+  asset: string = "";
   constructor(private videoService: VideoService) {}
 
   ngOnInit() {
     this.videoService.getVideos().subscribe((videos) => {
-      console.log(videos);
+      this.asset = this.pickRandom(videos).filename;
+      console.log(this.asset);
     });
+  }
+
+  private pickRandom(array: any[]) {
+    if (!array.length) return null; // Safety check for empty arrays
+    const randomIndex = Math.floor(Math.random() * array.length);
+    return array[randomIndex];
   }
 }
