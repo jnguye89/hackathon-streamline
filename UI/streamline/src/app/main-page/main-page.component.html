@@ -1,10 +1,12 @@
 <div cass="video-container">
-    <video #videoPlayer controls autoplay>
-        <source src="video.mp4" type="video/mp4"> Does not support
+    <video #videoPlayer controls autoplay muted class="responsive-video">>
+        <source src="/assets/IMG_9338.MOV" type="video/mp4"> Does not support
     </video>
     <div class="buttons" fxLayout="row" fxLayoutAlign="space-between center" style="width: 100%;">
-        <div>
-            Icon here
+        <div class="icon-wrapper">
+            <a routerLink=".">
+                <mat-icon class="transparent icon">person</mat-icon>
+            </a>
         </div>
         <div>
             <button mat-button button class="transparent button large-button">Calls</button>
