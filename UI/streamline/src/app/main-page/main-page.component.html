@@ -2,10 +2,20 @@
     <video #videoPlayer controls autoplay>
         <source src="video.mp4" type="video/mp4"> Does not support
     </video>
-    <div class="buttons">
-        <button mat-button button class="transparent button">Calls</button>
-        <button mat-button button class="transparent button">Stream</button>
-        <button mat-button button class="transparent button">Watch</button>
-        <button mat-button button class="transparent button">Listen</button>
+    <div class="buttons" fxLayout="row" fxLayoutAlign="space-between center" style="width: 100%;">
+        <div>
+            Icon here
+        </div>
+        <div>
+            <button mat-button button class="transparent button large-button">Calls</button>
+            <button mat-button button class="transparent button large-button">Stream</button>
+            <button mat-button button class="transparent button large-button">Watch</button>
+            <button mat-button button class="transparent button large-button">Listen</button>
+        </div>
+        <div class="icon-wrapper">
+            <a routerLink=".">
+                <mat-icon class="transparent icon">search</mat-icon>
+            </a>
+        </div>
     </div>
 </div>
