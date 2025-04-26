@@ -1,23 +1,39 @@
-<div cass="video-container">
-    <video #videoPlayer controls autoplay muted class="responsive-video">>
-        <source src="/assets/IMG_9338.MOV" type="video/mp4"> Does not support
+<div class="main-container">
+  <div cass="video-container" fxLayout="row" fxLayoutAlign="center center">
+    <video #videoPlayer controls autoplay muted class="responsive-video">
+      <source src="{{asset}}" type="video/mp4" />
+      Does not support
     </video>
-    <div class="buttons" fxLayout="row" fxLayoutAlign="space-between center" style="width: 100%;">
-        <div class="icon-wrapper">
-            <a routerLink=".">
-                <mat-icon class="transparent icon">person</mat-icon>
-            </a>
-        </div>
-        <div>
-            <button mat-button button class="transparent button large-button">Calls</button>
-            <button mat-button button class="transparent button large-button">Stream</button>
-            <button mat-button button class="transparent button large-button">Watch</button>
-            <button mat-button button class="transparent button large-button">Listen</button>
-        </div>
-        <div class="icon-wrapper">
-            <a routerLink=".">
-                <mat-icon class="transparent icon">search</mat-icon>
-            </a>
-        </div>
+    <div
+      class="buttons"
+      fxLayout="row"
+      fxLayoutAlign="space-between center"
+      style="width: 100%"
+    >
+      <div class="icon-wrapper">
+        <a routerLink=".">
+          <mat-icon class="transparent icon">person</mat-icon>
+        </a>
+      </div>
+      <div>
+        <button mat-button button class="transparent button large-button">
+          Calls
+        </button>
+        <button mat-button button class="transparent button large-button">
+          Stream
+        </button>
+        <button mat-button button class="transparent button large-button">
+          Watch
+        </button>
+        <button mat-button button class="transparent button large-button">
+          Listen
+        </button>
+      </div>
+      <div class="icon-wrapper">
+        <a routerLink=".">
+          <mat-icon class="transparent icon">search</mat-icon>
+        </a>
+      </div>
     </div>
+  </div>
 </div>

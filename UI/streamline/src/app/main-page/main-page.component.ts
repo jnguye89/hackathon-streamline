@@ -16,13 +16,15 @@ import { HttpClientModule } from '@angular/common/http';
     MatDividerModule,
     FlexLayoutModule,
     MatChipsModule,
-    HttpClientModule
+    HttpClientModule,
   ],
   providers: [VideoService],
   templateUrl: './main-page.component.html',
-  styleUrl: './main-page.component.scss'
+  styleUrl: './main-page.component.scss',
 })
 export class MainPageComponent {
+  videos = ['/assets/IMG_9338.MOV', '/assets/IMG_9701.MOV'];
+  asset = this.videos[0];
   constructor(private videoService: VideoService) {}
 
   ngOnInit() {
