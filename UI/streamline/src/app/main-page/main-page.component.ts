@@ -6,6 +6,7 @@ import { FlexLayoutModule } from '@angular/flex-layout';
 import { MatChipsModule } from '@angular/material/chips';
 import { VideoService } from '../services/video-service';
 import { HttpClientModule } from '@angular/common/http';
+import { RouterModule } from '@angular/router';
 
 @Component({
   selector: 'app-main-page',
@@ -17,6 +18,7 @@ import { HttpClientModule } from '@angular/common/http';
     FlexLayoutModule,
     MatChipsModule,
     HttpClientModule,
+    RouterModule
   ],
   providers: [VideoService],
   templateUrl: './main-page.component.html',
