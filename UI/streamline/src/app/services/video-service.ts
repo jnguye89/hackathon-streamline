@@ -20,4 +20,16 @@ export class VideoService {
     formData.append('title', title);
     return this.http.post(`${this.apiUrl}/upload`, formData);
   }
+
+  getBlobVideos(): Observable<any> {
+    return this.http.get(`${this.apiUrl}/blob/videos`);
+  }
+
+  getBlob(fileName: string): Observable<any> {
+    return this.http.get<string>(`${this.apiUrl}/blob/videos/${fileName}`);
+  }
+
+  getFirebaseVideos(): Observable<string[]> {
+    return this.http.get<string[]>(`${this.apiUrl}/firebase/videos`);
+  }
 }

@@ -3,13 +3,25 @@ const mongoose = require('mongoose');
 const multer = require('multer');
 const cors = require('cors');
 const path = require('path');
+const { BlobServiceClient } = require('@azure/storage-blob');
+
+const AZURE_STORAGE_CONNECTION_STRING = "from json";
+
 const { google } = require('googleapis');
 const fs = require('fs');
 const { OAuth2 } = google.auth;
 const app = express();
 const streamifier = require('streamifier');
+const admin = require('firebase-admin');
+const serviceAccount = require('./streamline-39164-firebase-adminsdk-fbsvc-9f85dddc6e.json');
+const { file } = require('googleapis/build/src/apis/file');
 require('dotenv').config(); 
+admin.initializeApp({
+  credential: admin.credential.cert(serviceAccount),
+  storageBucket: 'streamline-39164.firebasestorage.app'
+});
 
+const bucket = admin.storage().bucket();
 app.use(cors());
 
 // Connect to MongoDB
@@ -101,6 +113,78 @@ app.get('/videos/:filename', async (req, res) => {
   } else {
     res.status(404).send('Video not found');
   }
+});
+
+// Serve video files (you can also create a link to Google Drive video)
+app.get('/videos/:filename', async (req, res) => {
+  const video = await Video.findOne({ title: req.params.filename });
+
+  if (video) {
+    const fileId = video.driveFileId;
+
+    // Generate a public link to the video on Google Drive
+    const file = await drive.files.get({
+      fileId: fileId,
+      fields: 'webContentLink',
+    });
+
+    res.redirect(file.data.webContentLink);
+  } else {
+    res.status(404).send('Video not found');
+  }
+})
+
+app.get('/blob/videos', async (req, res) => {
+  const blobServiceClient = BlobServiceClient.fromConnectionString(AZURE_STORAGE_CONNECTION_STRING);
+  const containerClient = blobServiceClient.getContainerClient('videos');
+  var files = [];
+  for await (const blob of containerClient.listBlobsFlat()) {
+    files.push(blob.name);
+  }
+
+  res.send(files);
+})
+
+app.get('/blob/videos/:filename', async (req, res) => {
+  const blobServiceClient = BlobServiceClient.fromConnectionString(AZURE_STORAGE_CONNECTION_STRING);
+  const containerClient = blobServiceClient.getContainerClient('videos');
+  const blobClient = await containerClient.getBlobClient(req.params.filename);
+
+  const sasUrl = blobClient.url;
+  console.log(blobClient);
+  res.json({videoUrl: sasUrl});
+})
+
+app.post('/firebase/video', upload.single('video'), async (req, res) => {
+  if (!req.file) return res.status(400).send('No file uploaded.');
+
+  const blob = bucket.file('videos/' + req.file.originalname);
+  const blobStream = blob.createWriteStream({
+    metadata: { contentType: req.file.mimetype }
+  });
+
+  blobStream.on('error', (err) => {
+    console.error(err);
+    res.status(500).send('Upload error');
+  });
+
+  blobStream.on('finish', async () => {
+    const [signedUrl] = await blob.getSignedUrl({
+      version: 'v4',
+      action: 'read',
+      expires: Date.now() + 60 * 60 * 1000, // 1 hour expiration
+    });
+
+    res.status(200).send({ url: signedUrl });
+  });
+
+  blobStream.end(req.file.buffer);
+});
+
+app.get('/firebase/videos', async (req, res) => {
+  const [files] = await bucket.getFiles({ prefix: 'videos/' }); // 'videos/' is optional path/folder
+
+  res.status(200).send(files.map(file => `https://firebasestorage.googleapis.com/v0/b/${bucket.name}/o/${encodeURIComponent(file.name)}?alt=media`));
 });
 
 // Start the server

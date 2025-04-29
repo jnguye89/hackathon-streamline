@@ -1,4 +1,5 @@
 import { Component } from '@angular/core';
+import { CommonModule } from '@angular/common';
 import { MatIconModule } from '@angular/material/icon';
 import { MatDividerModule } from '@angular/material/divider';
 import { MatButtonModule } from '@angular/material/button';
@@ -7,6 +8,7 @@ import { MatChipsModule } from '@angular/material/chips';
 import { VideoService } from '../services/video-service';
 import { HttpClientModule } from '@angular/common/http';
 import { RouterModule } from '@angular/router';
+import { BehaviorSubject, Subject, takeUntil } from 'rxjs';
 
 @Component({
   selector: 'app-main-page',
@@ -18,46 +20,72 @@ import { RouterModule } from '@angular/router';
     FlexLayoutModule,
     MatChipsModule,
     HttpClientModule,
-    RouterModule
+    RouterModule,
+    CommonModule,
   ],
   providers: [VideoService],
   templateUrl: './main-page.component.html',
   styleUrl: './main-page.component.scss',
 })
 export class MainPageComponent {
-  videos: any[] = [];
-  asset: string = "";
-  constructor(private videoService: VideoService) {}
+  private destroy$ = new Subject<void>();
+  private videoTitlesSubject = new BehaviorSubject<string[]>([]);
+  videoTitles$ = this.videoTitlesSubject.asObservable();
+  isPortrait = false;
 
-  ngOnInit() {
-    this.videoService.getVideos().subscribe((videos) => {
-      this.videos = videos;
-      this.asset = `video-assets/${this.pickRandom(videos).filename}`;
-    });
+  currentIndex = 0;
+  currentTitle = '';
+
+  constructor(private videoService: VideoService) {
+    this.videoService
+      .getFirebaseVideos()
+      .pipe(takeUntil(this.destroy$))
+      .subscribe((titles) => {
+        this.videoTitlesSubject.next(titles);
+
+        if (titles.length > 0) {
+          this.currentIndex = Math.floor(Math.random() * titles.length);
+          this.currentTitle = titles[this.currentIndex];
+        }
+      });
   }
 
-  private pickRandom(array: any[]) {
-    if (!array.length) return null; // Safety check for empty arrays
-    const randomIndex = Math.floor(Math.random() * array.length);
-    return array[randomIndex];
+  ngOnDestroy() {
+    this.destroy$.next();
+    this.destroy$.complete;
   }
 
-  changeVideo(isNext: Boolean) {
-    var currentIndex = this.videos.findIndex(video => this.asset.includes(video.filename));
-    if (isNext) {
-      if (currentIndex === this.videos.length - 1) {
-        this.asset = `video-assets/${this.videos[0].filename}`;
-      } else {
-        this.asset = `video-assets/${this.videos[(currentIndex + 1)].filename}`;
-      }
+  setRandomStart(videos: string[]) {
+    if (this.currentIndex === 0 && videos.length) {
+      this.currentIndex = Math.floor(Math.random() * videos.length);
     }
-    else {
-      if (currentIndex === 0) {
-        this.asset = `video-assets/${this.videos[this.videos.length - 1].filename}`;
-      }
-      else {
-        this.asset = `video-assets/${this.videos[(currentIndex - 1)].filename}`;
-      }
+    return videos[this.currentIndex];
+  }
+
+  next() {
+    const titles = this.videoTitlesSubject.value;
+    if (!titles.length) return;
+
+    this.currentIndex++;
+    if (this.currentIndex >= titles.length) {
+      this.currentIndex = 0;
     }
+    this.currentTitle = titles[this.currentIndex];
+  }
+
+  previous() {
+    const titles = this.videoTitlesSubject.value;
+    if (!titles.length) return;
+
+    this.currentIndex--;
+    if (this.currentIndex < 0) {
+      this.currentIndex = titles.length - 1;
+    }
+    this.currentTitle = titles[this.currentIndex];
+  }
+
+  onVideoLoaded(video: HTMLVideoElement) {
+    const aspectRatio = video.videoWidth / video.videoHeight;
+    this.isPortrait = aspectRatio < 1; // if width < height, it's portrait
   }
 }
