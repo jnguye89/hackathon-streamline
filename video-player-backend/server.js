@@ -13,13 +13,13 @@ const { OAuth2 } = google.auth;
 const app = express();
 const streamifier = require("streamifier");
 const admin = require("firebase-admin");
-const serviceAccount = require("./streamline-39164-firebase-adminsdk-fbsvc-9f85dddc6e.json");
+const serviceAccount = require("./serviceAccountKey.json");
 const { file } = require("googleapis/build/src/apis/file");
 const radioService = require("./radio.service.js");
 
 require("dotenv").config();
 admin.initializeApp({
-  credential: admin.credential.cert(serviceAccount),
+  credential: admin.credential.cert(serviceAccount) ?? admin.credential.applicationDefault(),
   storageBucket: "streamline-39164.firebasestorage.app",
 });
 
