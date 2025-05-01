@@ -11,7 +11,7 @@ import { RouterModule } from '@angular/router';
 import { BehaviorSubject, Subject, takeUntil } from 'rxjs';
 
 @Component({
-  selector: 'app-main-page',
+  selector: 'app-watch',
   standalone: true,
   imports: [
     MatButtonModule,
@@ -24,10 +24,10 @@ import { BehaviorSubject, Subject, takeUntil } from 'rxjs';
     CommonModule,
   ],
   providers: [VideoService],
-  templateUrl: './main-page.component.html',
-  styleUrl: './main-page.component.scss',
+  templateUrl: './watch.component.html',
+  styleUrl: './watch.component.scss',
 })
-export class MainPageComponent {
+export class WatchComponent {
   private destroy$ = new Subject<void>();
   private videoTitlesSubject = new BehaviorSubject<string[]>([]);
   videoTitles$ = this.videoTitlesSubject.asObservable();

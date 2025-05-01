@@ -1,5 +1,5 @@
 import { Routes } from '@angular/router';
-import { MainPageComponent } from './main-page/main-page.component';
+import { WatchComponent } from './watch/watch.component';
 import { CallsComponent } from './calls/calls.component';
 import { StreamComponent } from './stream/stream.component';
 import { ListenComponent } from './listen/listen.component';
@@ -7,11 +7,11 @@ import { ListenComponent } from './listen/listen.component';
 export const routes: Routes = [
     {
         path: '',
-        component: MainPageComponent
+        component: WatchComponent
     },
     {
         path: 'watch',
-        component: MainPageComponent
+        component: WatchComponent
     },
     {
         path: 'calls',
