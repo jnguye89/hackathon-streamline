@@ -8,25 +8,7 @@
   position: absolute;
   width: 50px;
   height: 50px;
-}
-
-.overlay-container.left {
-  left: 0;
-  top: 50vh
-}
-
-.overlay-container.right {
-  right: 0;
-  top: 50vh
-}
-
-.buttons {
-  position: absolute;
-  top: 10px;
-  left: 50%;
-  transform: translateX(-50%);
-  display: flex;
-  gap: 10px;
+  z-index: 99;
 }
 
 .transparent-button {
@@ -37,21 +19,15 @@
   cursor: pointer;
 }
 
-.large-button {
-  font-size: 18px;
-  padding: 16px 32px;
-  min-width: 150px;
+.overlay-container.left {
+  left: 0;
+  top: 50vh;
 }
 
-.icon-wrapper {
-  padding: 10px;
-  cursor: pointer;
+.overlay-container.right {
+  right: 0;
+  top: 50vh;
 }
-
-.icon-wrapper mat-icon {
-  color: white; /* Foreground (icon) color */
-  font-size: 24px; /* Optional: change size */
-} 
 
 .main-container {
   background-color: #000000;
@@ -65,4 +41,9 @@
 .portrait {
   height: 100vh;
   width: auto;
+}
+
+.icon-wrapper mat-icon {
+  color: white; /* Foreground (icon) color */
+  font-size: 24px; /* Optional: change size */
 }

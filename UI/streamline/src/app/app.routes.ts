@@ -10,6 +10,10 @@ export const routes: Routes = [
         component: MainPageComponent
     },
     {
+        path: 'watch',
+        component: MainPageComponent
+    },
+    {
         path: 'calls',
         component: CallsComponent
     },

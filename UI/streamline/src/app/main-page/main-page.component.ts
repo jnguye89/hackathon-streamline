@@ -5,7 +5,7 @@ import { MatDividerModule } from '@angular/material/divider';
 import { MatButtonModule } from '@angular/material/button';
 import { FlexLayoutModule } from '@angular/flex-layout';
 import { MatChipsModule } from '@angular/material/chips';
-import { VideoService } from '../services/video-service';
+import { VideoService } from '../services/video.service';
 import { HttpClientModule } from '@angular/common/http';
 import { RouterModule } from '@angular/router';
 import { BehaviorSubject, Subject, takeUntil } from 'rxjs';
@@ -53,13 +53,6 @@ export class MainPageComponent {
   ngOnDestroy() {
     this.destroy$.next();
     this.destroy$.complete;
-  }
-
-  setRandomStart(videos: string[]) {
-    if (this.currentIndex === 0 && videos.length) {
-      this.currentIndex = Math.floor(Math.random() * videos.length);
-    }
-    return videos[this.currentIndex];
   }
 
   next() {
